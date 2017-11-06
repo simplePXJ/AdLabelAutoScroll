@@ -5,6 +5,8 @@
 //  Created by 陈华荣 on 16/4/6.
 //  Copyright © 2016年 陈华荣. All rights reserved.
 //
+#define Tag_CurrentL 60001
+#define Tag_HiddenL 60002
 
 #import "HRAdView.h"
 #define ViewWidth  self.bounds.size.width
@@ -98,25 +100,23 @@
     
     __block UILabel *currentLabel;
     __block UILabel *hidenLabel;
-    __weak typeof(self) weakself = self;
     [self.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([obj isKindOfClass:[UILabel class]]) {
             UILabel *label = obj;
-            NSString *string = weakself.adTitles[index];
-            if ([label.text isEqualToString:string]) {
+            if (label.tag == Tag_CurrentL) {
                 currentLabel = label;
             }else{
                 hidenLabel = label;
             }
         }
     }];
-    
+    hidenLabel.tag = Tag_CurrentL;
+    currentLabel.tag = Tag_HiddenL;
     if (index != self.adTitles.count - 1) {
         index++;
     } else {
         index = 0;
     }
-    
     hidenLabel.text = [NSString stringWithFormat:@"%@", self.adTitles[index]];
     [UIView animateWithDuration:1 animations:^{
         hidenLabel.frame = CGRectMake(margin, 0, ViewWidth - margin, ViewHeight);
